@@ -1,0 +1,97 @@
+openapi: 3.1.0
+
+info:
+  title: KY SEO Actions API
+  version: "2.0.0"
+  description: Authorized SERP + webpage extraction for SEO analysis.
+
+servers:
+  - url: https://kys-seo-actions.vercel.app
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  schemas: {}
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+
+  /serp/google:
+    post:
+      operationId: googleSerp
+      summary: Google SERP (authorized provider)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [q]
+              properties:
+                q: { type: string }
+                gl: { type: string }
+                hl: { type: string }
+                location: { type: string }
+                num: { type: integer }
+      responses:
+        "200":
+          description: SERP results
+          content:
+            application/json:
+              schema: {}
+
+  /page/fetch:
+    post:
+      operationId: fetchPageHtml
+      summary: Fetch raw HTML
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        "200":
+          description: HTML payload
+          content:
+            application/json:
+              schema: {}
+
+  /page/extract:
+    post:
+      operationId: extractPageContent
+      summary: Extract page content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        "200":
+          description: Extracted content
+          content:
+            application/json:
+              schema: {}
