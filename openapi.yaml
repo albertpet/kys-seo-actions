@@ -2,8 +2,8 @@ openapi: 3.1.0
 
 info:
   title: KY SEO Actions API
-  version: "1.0.4"
-  description: Authorized Google SERP lookup + webpage extraction for SEO analysis.
+  version: "1.0.5"
+  description: Authorized Google SERP lookup and webpage extraction for SEO analysis.
 
 servers:
   - url: https://kys-seo-actions.vercel.app
@@ -31,14 +31,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ok:
-                    type: boolean
+                additionalProperties: true
 
   /serp/google:
     post:
       operationId: googleSerp
-      summary: Google SERP via authorized provider (SerpApi)
+      summary: Google SERP via authorized provider
       requestBody:
         required: true
         content:
@@ -57,8 +55,6 @@ paths:
                   type: string
                 num:
                   type: integer
-                  minimum: 1
-                  maximum: 100
       responses:
         "200":
           description: SERP results
@@ -66,16 +62,75 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  query:
-                    type: object
-                    properties: {}
-                  organic_results:
-                    type: array
-                    items:
-                      type: object
-                      properties: {}
-                  related_questions:
-                    type: array
-                    items:
-                      ty
+                additionalProperties: true
+
+  /page/fetch:
+    post:
+      operationId: fetchPageHtml
+      summary: Fetch raw HTML
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+      responses:
+        "200":
+          description: HTML payload
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /page/extract:
+    post:
+      operationId: extractPage
+      summary: Extract page content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+      responses:
+        "200":
+          description: Extracted content
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /page/extract_batch:
+    post:
+      operationId: extractPagesBatch
+      summary: Batch extract pages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [urls]
+              properties:
+                urls:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Batch extraction result
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
