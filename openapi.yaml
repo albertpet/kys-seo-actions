@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: KY SEO Actions API
+  version: 1.0.0
+  description: Authorized SERP lookup + webpage extraction for SEO analysis.
+servers:
+  - url: https://YOUR_VERCEL_DOMAIN_HERE
+security:
+  - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+paths:
+  /health:
+    get:
+      summary: Health check
+      security: []
+      responses:
+        "200":
+          description: OK
+  /serp/google:
+    post:
+      summary: Google SERP via SerpApi (authorized)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [q]
+              properties:
+                q: { type: string, description: Keyword query }
+                location: { type: string, description: e.g. "United States" }
+                hl: { type: string, description: Interface language, e.g. "en" }
+                gl: { type: string, description: Country, e.g. "us" }
+                num: { type: integer, minimum: 1, maximum: 100 }
+      responses:
+        "200":
+          description: SERP results
+          content:
+            application/json:
+              schema:
+                type: object
+  /page/fetch:
+    post:
+      summary: Fetch raw HTML for a web page
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        "200":
+          description: HTML payload
+          content:
+            application/json:
+              schema:
+                type: object
+  /page/extract:
+    post:
+      summary: Extract clean text + headings + meta for SEO analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        "200":
+          description: Extraction result
+          content:
+            application/json:
+              schema:
+                type: object
+  /page/extract_batch:
+    post:
+      summary: Extract multiple pages (up to 10) for competitor comparison
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [urls]
+              properties:
+                urls:
+                  type: array
+                  items: { type: string, format: uri }
+                  minItems: 1
+                  maxItems: 10
+                concurrency:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+      responses:
+        "200":
+          description: Batch extraction result
+          content:
+            application/json:
+              schema:
+                type: object
