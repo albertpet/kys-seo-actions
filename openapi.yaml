@@ -1,8 +1,11 @@
-openapi: 3.0.3
+openapi: 3.1.0
+
 info:
   title: KY SEO Actions API
-  version: "1.0.1"
-  description: Authorized SERP lookup + webpage extraction for SEO analysis.
+  version: "1.0.2"
+  description: >
+    Authorized Google SERP lookup and webpage extraction service
+    for SEO analysis, competitor research, and content diagnostics.
 
 servers:
   - url: https://kys-seo-actions.vercel.app
@@ -13,7 +16,6 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
-  schemas: {}
 
 security:
   - ApiKeyAuth: []
@@ -38,27 +40,28 @@ paths:
   /serp/google:
     post:
       operationId: googleSerp
-      summary: Google SERP via SerpApi (authorized)
+      summary: Google SERP via authorized provider (SerpApi)
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [q]
+              required:
+                - q
               properties:
                 q:
                   type: string
                   description: Keyword query
                 location:
                   type: string
-                  description: e.g. "United States"
+                  description: e.g. United States
                 hl:
                   type: string
-                  description: Interface language, e.g. "en"
+                  description: Interface language (e.g. en)
                 gl:
                   type: string
-                  description: Country, e.g. "us"
+                  description: Country code (e.g. us)
                 num:
                   type: integer
                   minimum: 1
@@ -70,18 +73,34 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  query:
+                    type: object
+                  organic_results:
+                    type: array
+                    items:
+                      type: object
+                  related_questions:
+                    type: array
+                    items:
+                      type: object
+                  related_searches:
+                    type: array
+                    items:
+                      type: object
 
   /page/fetch:
     post:
       operationId: fetchPageHtml
-      summary: Fetch raw HTML for a web page
+      summary: Fetch raw HTML of a web page
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [url]
+              required:
+                - url
               properties:
                 url:
                   type: string
@@ -93,49 +112,69 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  url:
+                    type: string
+                  html:
+                    type: string
 
   /page/extract:
     post:
       operationId: extractPage
-      summary: Extract clean text + headings + meta for SEO analysis
+      summary: Extract readable text and structure from a page
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [url]
+              required:
+                - url
               properties:
                 url:
                   type: string
                   format: uri
       responses:
         "200":
-          description: Extraction result
+          description: Extracted page content
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  url:
+                    type: string
+                  title:
+                    type: string
+                  meta_description:
+                    type: string
+                  headings:
+                    type: array
+                    items:
+                      type: object
+                  text_content:
+                    type: string
 
   /page/extract_batch:
     post:
       operationId: extractPagesBatch
-      summary: Extract multiple pages (up to 10) for competitor comparison
+      summary: Batch extract multiple competitor pages
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [urls]
+              required:
+                - urls
               properties:
                 urls:
                   type: array
+                  minItems: 1
+                  maxItems: 10
                   items:
                     type: string
                     format: uri
-                  minItems: 1
-                  maxItems: 10
                 concurrency:
                   type: integer
                   minimum: 1
@@ -147,3 +186,8 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
