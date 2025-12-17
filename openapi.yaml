@@ -2,8 +2,8 @@ openapi: 3.1.0
 
 info:
   title: KY SEO Actions API
-  version: "1.0.5"
-  description: Authorized Google SERP lookup and webpage extraction for SEO analysis.
+  version: "1.0.6"
+  description: Authorized SERP + webpage extraction for SEO analysis.
 
 servers:
   - url: https://kys-seo-actions.vercel.app
@@ -29,14 +29,12 @@ paths:
           description: OK
           content:
             application/json:
-              schema:
-                type: object
-                additionalProperties: true
+              schema: {}
 
   /serp/google:
     post:
       operationId: googleSerp
-      summary: Google SERP via authorized provider
+      summary: Google SERP (authorized provider)
       requestBody:
         required: true
         content:
@@ -47,90 +45,15 @@ paths:
               properties:
                 q:
                   type: string
-                location:
+                gl:
                   type: string
                 hl:
                   type: string
-                gl:
+                location:
                   type: string
                 num:
                   type: integer
       responses:
         "200":
-          description: SERP results
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-
-  /page/fetch:
-    post:
-      operationId: fetchPageHtml
-      summary: Fetch raw HTML
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [url]
-              properties:
-                url:
-                  type: string
-      responses:
-        "200":
-          description: HTML payload
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-
-  /page/extract:
-    post:
-      operationId: extractPage
-      summary: Extract page content
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [url]
-              properties:
-                url:
-                  type: string
-      responses:
-        "200":
-          description: Extracted content
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
-
-  /page/extract_batch:
-    post:
-      operationId: extractPagesBatch
-      summary: Batch extract pages
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [urls]
-              properties:
-                urls:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        "200":
-          description: Batch extraction result
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: true
+          description: SERP results (JSON)
+          c
