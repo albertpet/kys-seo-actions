@@ -1,0 +1,19 @@
+{
+  "name": "kys-seo-actions",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsdom": "^24.1.0",
+    "node-fetch": "^3.3.2",
+    "p-limit": "^6.1.0",
+    "zod": "^3.23.8"
+  }
+}
