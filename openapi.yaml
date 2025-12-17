@@ -56,4 +56,76 @@ paths:
       responses:
         "200":
           description: SERP results (JSON)
-          c
+          content:
+            application/json:
+              schema: {}
+
+  /page/fetch:
+    post:
+      operationId: fetchPageHtml
+      summary: Fetch raw HTML (JSON)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        "200":
+          description: HTML payload (JSON)
+          content:
+            application/json:
+              schema: {}
+
+  /page/extract:
+    post:
+      operationId: extractPage
+      summary: Extract readable content (JSON)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        "200":
+          description: Extracted content (JSON)
+          content:
+            application/json:
+              schema: {}
+
+  /page/extract_batch:
+    post:
+      operationId: extractPagesBatch
+      summary: Batch extract pages (JSON)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [urls]
+              properties:
+                urls:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                concurrency:
+                  type: integer
+      responses:
+        "200":
+          description: Batch extraction result (JSON)
+          content:
+            application/json:
+              schema: {}
