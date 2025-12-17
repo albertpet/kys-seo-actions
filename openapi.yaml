@@ -2,10 +2,8 @@ openapi: 3.1.0
 
 info:
   title: KY SEO Actions API
-  version: "1.0.2"
-  description: >
-    Authorized Google SERP lookup and webpage extraction service
-    for SEO analysis, competitor research, and content diagnostics.
+  version: "1.0.3"
+  description: Authorized Google SERP lookup + webpage extraction for SEO analysis.
 
 servers:
   - url: https://kys-seo-actions.vercel.app
@@ -16,6 +14,7 @@ components:
       type: apiKey
       in: header
       name: X-API-KEY
+  schemas: {}
 
 security:
   - ApiKeyAuth: []
@@ -47,21 +46,16 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - q
+              required: [q]
               properties:
                 q:
                   type: string
-                  description: Keyword query
                 location:
                   type: string
-                  description: e.g. United States
                 hl:
                   type: string
-                  description: Interface language (e.g. en)
                 gl:
                   type: string
-                  description: Country code (e.g. us)
                 num:
                   type: integer
                   minimum: 1
@@ -76,31 +70,34 @@ paths:
                 properties:
                   query:
                     type: object
+                    properties: {}
                   organic_results:
                     type: array
                     items:
                       type: object
+                      properties: {}
                   related_questions:
                     type: array
                     items:
                       type: object
+                      properties: {}
                   related_searches:
                     type: array
                     items:
                       type: object
+                      properties: {}
 
   /page/fetch:
     post:
       operationId: fetchPageHtml
-      summary: Fetch raw HTML of a web page
+      summary: Fetch raw HTML for a web page
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - url
+              required: [url]
               properties:
                 url:
                   type: string
@@ -121,22 +118,21 @@ paths:
   /page/extract:
     post:
       operationId: extractPage
-      summary: Extract readable text and structure from a page
+      summary: Extract clean text + headings + meta for SEO analysis
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - url
+              required: [url]
               properties:
                 url:
                   type: string
                   format: uri
       responses:
         "200":
-          description: Extracted page content
+          description: Extraction result
           content:
             application/json:
               schema:
@@ -152,21 +148,25 @@ paths:
                     type: array
                     items:
                       type: object
+                      properties:
+                        tag:
+                          type: string
+                        text:
+                          type: string
                   text_content:
                     type: string
 
   /page/extract_batch:
     post:
       operationId: extractPagesBatch
-      summary: Batch extract multiple competitor pages
+      summary: Extract multiple pages (up to 10) for competitor comparison
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - urls
+              required: [urls]
               properties:
                 urls:
                   type: array
@@ -191,3 +191,4 @@ paths:
                     type: array
                     items:
                       type: object
+                      properties: {}
