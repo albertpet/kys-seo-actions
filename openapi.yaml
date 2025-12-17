@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: Authorized SERP lookup + webpage extraction for SEO analysis.
 servers:
-  - url: https://YOUR_VERCEL_DOMAIN_HERE
+  - url: https://kys-seo-actions.vercel.app
 security:
   - ApiKeyAuth: []
 components:
